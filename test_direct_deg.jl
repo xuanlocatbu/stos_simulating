@@ -13,6 +13,6 @@ using Plots
 plot(t_vals_1, A_vals_1, 
      xlabel="Time t", ylabel="A(t)", 
      title="Simulation of A(t) using direct simulation",
-     label="Simulation 1")
+     label="Simulation 1", legend = :outerright)
 plot!(t_vals_2, A_vals_2, label="Simulation 2")
 plot!(t_vals_3, A_vals_3, label="Simulation 3")

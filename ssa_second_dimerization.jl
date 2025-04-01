@@ -1,11 +1,11 @@
-function ssa_prod_deg(n, k1, k2v, T)
+function ssa_second_dimerization(n, k1, k2, T)
     """
-    Perform the improved SSA for the reaction A -> ∅ with rate k1*A(t).
-    Perform the improved SSA for the reaction  ∅ -> A with rate k2v*A(t).
+    Perform the improved SSA for the reaction A + A -> ∅ with rate k1v-1*A(t).
+    Perform the improved SSA for the reaction ∅ -> with rate k2v*A(t).
 
     Arguments:
       - n: Initial number of molecules of A (A(0))
-      - k1, k2v:  Rate constant
+      - k1v-1, k2v:  Rate constant
       - T:  Final time to stop simulation
 
     Returns:
@@ -27,7 +27,9 @@ function ssa_prod_deg(n, k1, k2v, T)
         r1 = rand()
         r2 = rand()
         
-        r = A_vec[end]*k1+k2v
+        a1 = A_vec[end]*(A_vec[end]-1)*k1 
+        a2 = k2
+        r = a1 + a2
         # 2) Compute tau = 1/(A*k)*ln(1/r)
         tau = (1 / r) * log(1 / r1)
         
@@ -36,10 +38,10 @@ function ssa_prod_deg(n, k1, k2v, T)
         
         # Check if the new time is still within T
         if t <= T
-            if r2 < k2v/r
-                A += 1
+            if r2 < a1/r
+                A -= 2
             else
-                A -= 1
+                A += 1
             end
             # Save the new state. Each time we update t anf A, we append them to t_vec and A_vec:
             push!(t_vec, t)
