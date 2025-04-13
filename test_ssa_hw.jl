@@ -1,6 +1,6 @@
 include("ssa_hw.jl") #call out the location of the file
 
-#ssa_second_dimerization
+#ssa_homework
 na = 0
 nb = 100
 nc = 0
@@ -82,10 +82,13 @@ num_sim = 10000
 simulations = [ssa_hw(na, nb, nc, k1, k2, k3, T) for i in 1:num_sim]
 
 # Plot the histogram of number of A
-results_A = last(simulations[2])
+results_A = [last(simulations[1][2])]
+for i in 2:num_sim
+    push!(results_A, last(simulations[i][2]))
+end
 min_nA = minimum(results_A) #minimum value from all results
 max_nA = maximum(results_A) #maximum value from all results
-binsA = (min_nA - 1):1:(max_nA + 1) 
+binsA = (min_nA - 0.5):1:(max_nA + 0.5) 
 
 hisA = histogram(results_A,
     bins = binsA,
@@ -96,10 +99,13 @@ hisA = histogram(results_A,
     title = "Histogram of number of A"
 )
 
-results_B = last(simulations[3])
+results_B = [last(simulations[1][3])]
+for i in 2:num_sim
+    push!(results_B, last(simulations[i][3]))
+end
 min_nB = minimum(results_B) #minimum value from all results
 max_nB = maximum(results_B) #maximum value from all results
-binsB = (min_nB - 1):1:(max_nB + 1) 
+binsB = (min_nB - 0.5):1:(max_nB + 0.5) 
 
 hisB = histogram(results_B,
     bins = binsB,
@@ -110,14 +116,18 @@ hisB = histogram(results_B,
     title = "Histogram of number of B"
 )
 
-results_C = last(simulations[4])
+results_C = [last(simulations[1][4])]
+for i in 2:num_sim
+    push!(results_C, last(simulations[i][4]))
+end
 min_nC = minimum(results_C) #minimum value from all results
 max_nC = maximum(results_C) #maximum value from all results
-binsC = (min_nC - 1):1:(max_nC + 1) 
+binsC = (min_nC - 0.5):1:(max_nC + 0.5) 
 
 hisC = histogram(results_C,
-    bins = binsC,
-    normalize = :pdf,  # Normalize so that the total area equals 1
+    bins = 30,
+    #bins = binsC,
+    #normalize = :pdf,  # Normalize so that the total area equals 1
     xlabel = "Final count of C",
     ylabel = "Distribution",
     label = "Gillespie SSA",

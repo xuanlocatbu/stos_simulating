@@ -45,7 +45,7 @@ num_sim = 10000
 results = [last(ssa_prod_deg(n, k1, k2v, T)[2]) for i in 1:num_sim]
 min_n = minimum(results) #minimum value from all results
 max_n = maximum(results) #maximum value from all results
-bins = (min_n - 1):1:(max_n + 1) 
+bins = (min_n - 0.5):1:(max_n + 0.5) 
 
 # Plot the histogram of simulation outcomes
 pic2 = histogram(results,

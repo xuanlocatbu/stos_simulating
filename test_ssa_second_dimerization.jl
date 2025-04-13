@@ -1,7 +1,7 @@
 include("ssa_second_dimerization.jl") #call out the location of the file
 
 #ssa_second_dimerization
-n = 0
+n = 0.0
 k1 = 0.005
 k2 = 1.0
 T = 100.0
@@ -18,12 +18,12 @@ t_vals_3, A_vals_3 = ssa_second_dimerization(n, k1, k2, T)
 using DifferentialEquations
 
 # Define the problem dA(t)/dt = -k1A(t) +k2v
-function f!(a, p, t) #Always remember to include !
+function f(a, p, t) #Always remember to include !
     k1, k2 = p       # Unpack parameters from the tuple
     return -2*k1*a^2 + k2
 end
 t_ode = (0.0,T)
-prob = ODEProblem(f!, n, t_ode, (k1, k2)) #input n is the initial condition
+prob = ODEProblem(f, n, t_ode, (k1, k2)) #input n is the initial condition
 
 # Solve the ODE 
 sol = solve(prob) 
@@ -45,7 +45,7 @@ num_sim = 10000
 results = [last(ssa_second_dimerization(n, k1, k2, T)[2]) for i in 1:num_sim]
 min_n = minimum(results) #minimum value from all results
 max_n = maximum(results) #maximum value from all results
-bins = (min_n - 1):1:(max_n + 1) 
+bins = (min_n - 0.5):1:(max_n + 0.5) 
 
 # Plot the histogram of simulation outcomes
 pic2 = histogram(results,

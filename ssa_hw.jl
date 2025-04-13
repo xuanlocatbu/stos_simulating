@@ -17,7 +17,7 @@ function ssa_hw(na, nb, nc, k1, k2, k3, T)
     """
     
     # Initialize time and molecule count
-    t = 0
+    t = 0.0
     A = na
     B = nb
     C = nc
