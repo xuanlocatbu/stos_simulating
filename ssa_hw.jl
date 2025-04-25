@@ -70,6 +70,10 @@ function ssa_hw(na, nb, nc, k1, k2, k3, T)
             push!(B_vec, B)
             push!(C_vec, C)
         else
+            push!(t_vec, T)
+            push!(A_vec, A)
+            push!(B_vec, B)
+            push!(C_vec, C)                #adding the last time!
             # If we've passed T, we stop; 
             break
         end

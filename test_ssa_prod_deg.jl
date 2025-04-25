@@ -18,12 +18,12 @@ t_vals_3, A_vals_3 = ssa_prod_deg(n, k1, k2v, T)
 using DifferentialEquations
 
 # Define the problem dA(t)/dt = -k1A(t) +k2v
-function f!(a, p, t) #Always remember to include !
+function f(a, p, t) #Remember to include ! if return a vector
     k1, k2v = p       # Unpack parameters from the tuple
     return -k1*a + k2v
 end
 t_ode = (0.0,T)
-prob = ODEProblem(f!, n, t_ode, (k1, k2v)) #input n is the initial condition
+prob = ODEProblem(f, n, t_ode, (k1, k2v)) #input n is the initial condition
 
 # Solve the ODE 
 sol = solve(prob) 

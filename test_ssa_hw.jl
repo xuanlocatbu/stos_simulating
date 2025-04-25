@@ -22,7 +22,7 @@ t_3, A_3, B_3, C_3 = ssa_hw(na, nb, nc, k1, k2, k3, T)
 using DifferentialEquations
 
 # Define the problem dA(t)/dt = -k1A(t) +k2v
-function f!(du, u, p, t) #Always remember to include !
+function f!(du, u, p, t) #Remember to include ! if return a vector
     k1, k2, k3 = p       # Unpack parameters from the tuple
     du[1] = k1 - k2*u[1]*u[2]
     du[2] = -k2*u[1]*u[2] - k3*u[2]

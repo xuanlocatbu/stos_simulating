@@ -43,7 +43,7 @@ function ssa_degen(n, k, T)
             push!(t_vec, t)
             push!(A_vec, A)
         else
-            push!(t_vec,T)
+            push!(t_vec,T) #adding the last time!
             push!(A_vec,A)
             # If we've passed T, we stop; 
             break

@@ -1,7 +1,7 @@
 function ssa_second_dimerization(n, k1, k2, T)
     """
     Perform the improved SSA for the reaction A + A -> ∅ with rate k1v-1*A(t).
-    Perform the improved SSA for the reaction ∅ -> with rate k2v*A(t).
+    Perform the improved SSA for the reaction ∅ ->A with rate k2v*A(t).
 
     Arguments:
       - n: Initial number of molecules of A (A(0))
@@ -47,7 +47,8 @@ function ssa_second_dimerization(n, k1, k2, T)
             push!(t_vec, t)
             push!(A_vec, A)
         else
-            # If we've passed T, we stop; 
+            push!(t_vec, T) #adding the last time
+            push!(A_vec, A)# If we've passed T, we stop; 
             break
         end
     end

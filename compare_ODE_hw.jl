@@ -1,4 +1,5 @@
 include("ssa_hw.jl")
+include("get_value_at.jl")
 
 #Define ODE problem
 na = 0
@@ -37,21 +38,31 @@ C_sol = [u[3] for u in sol.u]  # extract C values
 
 
 # for small number of simulations, calculate the mean
-small_num_sim = 10
+small_num_sim = 5
 small_simulations = [ssa_hw(na, nb, nc, k1, k2, k3, T) for i in 1:small_num_sim]
+
+large_num_sim = 100
+large_simulations = [ssa_hw(na, nb, nc, k1, k2, k3, T) for i in 1:large_num_sim]
 
 # Plot the mean of A
 small_t_A = [small_simulations[1][1]]
 small_A = [small_simulations[1][2]]
 for i in 2:small_num_sim
-    push!(small_t_A, small_simulations[i][1])
+    push!(small_t_A,small_simulations[i][1])
     push!(small_A, small_simulations[i][2])
+end
+
+large_t_A = [large_simulations[1][1]]
+large_A = [large_simulations[1][2]]
+for i in 2:large_num_sim
+    push!(large_t_A, large_simulations[i][1])
+    push!(large_A, large_simulations[i][2])
 end
 
 using Plots
 using LaTeXStrings
 figA_sim = plot(xlabel="Time t", ylabel="A(t)", 
-    title="Comparison small_A and ODE using SSA simulation", 
+    title="Comparison between ODE and mean of SSA simulation", 
     seriestype = :steppost, legend = false)
 plot!(t_sol, A_sol, color = :black, label = "ODE for A", linewidth = 2)
 
@@ -59,17 +70,44 @@ for i in 1:small_num_sim
     plot!(figA_sim, small_t_A[i], small_A[i], seriestype = :steppost)
 end
 
-using Statistics
+for i in 1:large_num_sim
+    plot!(figA_sim, large_t_A[i], large_A[i], seriestype = :steppost)
+end
 
-mean_A = mean(small_A)
+#   add to Amean the values of trajects[i] evaluated at the 
+#   times in t by using the evaltraject_attimes function:
+Ameans = zeros(length(t_sol))
+for i in 1:small_num_sim
+    traj = get_value_at(small_t_A[i],small_A[i],t_sol)
+    for i in 1:length(Ameans)
+        Ameans[i] += traj[i]
+    end
+end
+
+Ameanl = zeros(length(t_sol))
+for i in 1:large_num_sim
+    traj = get_value_at(large_t_A[i],large_A[i],t_sol)
+    for i in 1:length(Ameanl)
+        Ameanl[i] += traj[i]
+    end
+end
+
+# divide by number of sims to get the mean
+# The .= takes that result and writes it back into each element of Amean, 
+# rather than rebinding the variable to a fresh array.
+Ameans .= Ameans ./ small_num_sim
+Ameanl .= Ameanl ./ large_num_sim
 
 figA_mean = plot(xlabel="Time t", ylabel="A(t)", 
-    title="Comparison mean small_A and ODE using SSA simulation", 
+    title="Comparison between ODE and mean of SSA simulation", 
     seriestype = :steppost, legend = :outerright)
 plot!(t_sol, A_sol, color = :black, linewidth = 2)
-plot!(t_sol, small_A, color = :red,   
+plot!(t_sol, Ameans, color = :red,   
     linestyle = :dash, linewidth = 2,
-    label = "Average of small_A using SSA")
+    label = "Average of small simulation using SSA")
+plot!(t_sol, Ameanl, color = :blue,   
+    linestyle = :dash, linewidth = 2,
+    label = "Average of large simulation using SSA")
 
 
 display(figA_sim)

@@ -18,7 +18,7 @@ t_vals_3, A_vals_3 = ssa_second_dimerization(n, k1, k2, T)
 using DifferentialEquations
 
 # Define the problem dA(t)/dt = -k1A(t) +k2v
-function f(a, p, t) #Always remember to include !
+function f(a, p, t) # #Remember to include ! if return a vector
     k1, k2 = p       # Unpack parameters from the tuple
     return -2*k1*a^2 + k2
 end
