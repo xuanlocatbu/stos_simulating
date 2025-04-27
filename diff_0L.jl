@@ -1,5 +1,5 @@
-function diff_no_bound(x0, D, Δt, T)
-    # Solve X(t+Δt) = X(t) + \sqrt(Δt)ϵ
+function diff_0L(x0, D, Δt, L, T)
+    # Solve X(t+Δt) = X(t) + \sqrt(2DΔt)ϵ with reflective boundary on [0,L]
     X = [x0]
     tnew = 0.0
     t = [0.0]
@@ -8,6 +8,11 @@ function diff_no_bound(x0, D, Δt, T)
     while tnew <T
         ϵ = randn()
         Xnew = X[end] + con*ϵ
+        if Xnew <= 0
+            Xnew = - X[end] - con*ϵ
+        elseif Xnew >= L 
+            Xnew = 2*L - X[end] - con*ϵ
+        end
         push!(X, Xnew)
         tnew += Δt
         if tnew  <= T
